@@ -183,7 +183,7 @@ void callback(char *topic, byte *payload, unsigned int length)
   case 6:
     if (valuejson == 1) // Rolling Speaker Left
     {
-      digitalWrite(PSU, HIGH);
+
       analogWrite(motorAIn1, 190);
       digitalWrite(motorAIn2, LOW);
       client.publish("SpeakerRight", "OFF");
@@ -191,7 +191,7 @@ void callback(char *topic, byte *payload, unsigned int length)
     }
     else if (valuejson == 2) // Rolling Speaker Right
     {
-      digitalWrite(PSU, HIGH);
+
       analogWrite(motorAIn1, 190);
       digitalWrite(motorAIn2, HIGH);
       client.publish("SpeakerRight", "ON");
@@ -288,11 +288,16 @@ void loop()
     }
   }
 
-currentMillis = millis();
-  if (currentMillis - previousMillis >= 8000 && currentMillis - previousMillis < 8400 ) {
-    digitalWrite(PSU, LOW); 
-    Serial.print("caution currentMillis ");
-    Serial.println(currentMillis);
+  // Power UP Power Supply (PSU) for exact time and then turm it off
+  if (currentMillis - previousMillis <= PSUDelayInterval)
+  {
+    digitalWrite(PSU, HIGH);
+    previousMillis2 = currentMillis;
+  }
+  else if (currentMillis - previousMillis2 <= 120)
+  {
+    digitalWrite(PSU, LOW);
+    client.publish("PSU", "OFF");
     delay(100);
     PSUDelayInterval = 0;
   }
