@@ -206,6 +206,19 @@ void callback(char *topic, byte *payload, unsigned int length)
     }
     break;
 
+    case 7:
+      analogWrite(motorAIn1, valuejson);
+      digitalWrite(motorAIn2, LOW);
+      client.publish("SpeakerRight", "OFF");
+      client.publish("SpeakerLeft", "ON");
+    break;
+    case 8:
+      analogWrite(motorAIn1, valuejson);
+      digitalWrite(motorAIn2, HIGH);
+      client.publish("SpeakerRight", "OFF");
+      client.publish("SpeakerLeft", "ON");
+    break;
+
   default:
     Serial.print("Err device in case-switch invalid.");
     break;
